@@ -25,9 +25,9 @@ namespace Calculator1
         private decimal first = 0.0m;
         private decimal second = 0.0m;
         private char op;
-
-        decimal result;
+        private static decimal result;
         
+
         public MainWindow()
         {
             InitializeComponent();
@@ -228,49 +228,49 @@ namespace Calculator1
         }
 
         public void Equal_Click(object sender, RoutedEventArgs e)
-        { 
+        {
+            second = Decimal.Parse(Result.Text);
+
+            var res = Calculate(first, second, op);
+
+            Result.Text = res.ToString();
+
+            first = Convert.ToDecimal(res);
+        }     
+
+        public static decimal Calculate(decimal first, decimal second, char op)
+        {          
             switch(op)
             {
                 case '+':
                     result = first + second;
-                    Result.Text = result.ToString();
-                    first = result;
                     break;
 
-                case '-':        
+                case '-':
                     result = first - second;
-                    Result.Text = result.ToString();
-                    first = result;
                     break;
 
                 case '*':
                     result = first * second;
-                    Result.Text = result.ToString();
-                    first = result;
+                    break;
+
+                case '%':
+                    result = first % second;
                     break;
 
                 case '/':
                     try
                     {
                         result = first / second;
-                        Result.Text = result.ToString();
-                        first = result;
-                    }
-                    catch(DivideByZeroException)
-                    {
-                        Result.Text = "NOT / 0";
                         break;
-                    }                 
-                    break;
-
-                case '%':
-                    result = first % second;
-                    Result.Text = result.ToString();
-                    first = result;
-                    break;
-                default:  Result.Clear();
-                    break;
+                    }
+                    catch (DivideByZeroException)
+                    {
+                        break;
+                    }                                                             
             }
+
+            return result;
         }
     }
 }
